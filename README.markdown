@@ -28,7 +28,8 @@ well
     #define tModeCount 3
 
 setting up arrays - this uses explicit slopes, but you can add points to
-the beginning and end and use Catmull-Rom splines instead.
+the beginning and end and use Catmull-Rom splines instead.  Time is in minutes
+(resets each time you change modes) and temperature is in F (sorry - I'm American).
     double timeArrayPork[5] =   {0,  5,   10,  360, 540};
     double tempArrayPork[5] =   {60, 220, 228, 225, 215};
     double slopesArrayPork[5] = {0,  0,   0,   0,   0};  
@@ -43,5 +44,7 @@ In target_mode_loop():
     case tModeSmokedPork:
       lcd.print( "=> Pulled Pork" ); break;
 
-
+If you don't want to bother with the slopes through points, you could change the 
+spline interpolation to linear:
+    tempCurve.setDegree(1);
 

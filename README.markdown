@@ -10,6 +10,7 @@ My hardware has two buttons for control - Mode & Select
 Installation
 -------------
 Dependencies:
+
 - (Spline Library)[http://github.com/kerinin/arduino-splines]
 - (One Wire)[http://www.pjrc.com/teensy/td_libs_OneWire.html]
 - (DallasTemperature)[http://milesburton.com/index.php?title=Dallas_Temperature_Control_Library]

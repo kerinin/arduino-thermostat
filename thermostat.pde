@@ -13,7 +13,7 @@ struct config_t
 {
     int tMode;
     int hwProfile;
-    double constantSetPoint;
+    float constantSetPoint;
 } configuration;
 
 void setup(void) {
@@ -93,9 +93,9 @@ int pValue = 50;
 int iValue = 600;
 int dValue = 10;
 PID controller(&temperature, &pidOutput, &setPoint, pValue, iValue, dValue);
-double timeArrayRamp[2] = {0,5};
-double tempArrayRamp[2] = {60, 225};
-double slopesArrayRamp[2] = {0, 0};
+float timeArrayRamp[2] = {0,5};
+float tempArrayRamp[2] = {60, 225};
+float slopesArrayRamp[2] = {0, 0};
 
 void setup_controllers(void) {
   pinMode( relayPin, OUTPUT );
@@ -216,7 +216,7 @@ void active_loop(void) {
   }
   
   temperature = get_temp();
-  setPoint = tempCurve.value( static_cast<double>(millis()-time0)/60000 );
+  setPoint = tempCurve.value( static_cast<float>(millis()-time0)/60000 );
   controller.Compute();
   
   lcd.clear();
@@ -232,13 +232,13 @@ void active_loop(void) {
   analogWrite( relayPin, pidOutput );
 }
 
-double timeArrayPork[5] =   {0,  5,   10,  360, 540};
-double tempArrayPork[5] =   {60, 220, 228, 225, 215};
-double slopesArrayPork[5] = {0,  0,   0,   0,   0};
+float timeArrayPork[5] =   {0,  5,   10,  360, 540};
+float tempArrayPork[5] =   {60, 220, 228, 225, 215};
+float slopesArrayPork[5] = {0,  0,   0,   0,   0};
 
-double timeArrayBrisket[6] =   {0,  5,   10,  360, 540, 720};
-double tempArrayBrisket[6] =   {60, 220, 225, 220, 210, 200};
-double slopesArrayBrisket[6] = {0,  0,   0,   0,   0,   0};
+float timeArrayBrisket[6] =   {0,  5,   10,  360, 540, 720};
+float tempArrayBrisket[6] =   {60, 220, 225, 220, 210, 200};
+float slopesArrayBrisket[6] = {0,  0,   0,   0,   0,   0};
 
 void reset_spline( void ) {
   time0 = millis();

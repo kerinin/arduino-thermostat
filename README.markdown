@@ -7,6 +7,15 @@ for 4-pin display output.
 
 My hardware has two buttons for control - Mode & Select
 
+Installation
+-------------
+Dependencies:
+- (Spline Library)[http://github.com/kerinin/arduino-splines]
+- (One Wire)[http://www.pjrc.com/teensy/td_libs_OneWire.html]
+- (DallasTemperature)[http://milesburton.com/index.php?title=Dallas_Temperature_Control_Library]
+- (PID_Beta6)[http://www.arduino.cc/playground/Code/PIDLibrary]
+- (Buttons)[http://www.arduino.cc/playground/Code/Buttons]
+
 Using
 -------------
 You'll want to take a look at the pin settings and either adjust

@@ -3,7 +3,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <LiquidCrystal.h>
-#include <PID_Beta6.h>
+#include <PID_v1.h>
 #include <EEPROM.h>
 
 // Setup
@@ -37,7 +37,7 @@ void setup(void) {
 // Sensor Variables
 //byte oneWireData[12];
 //byte oneWireAddr[8];
-DeviceAddress insideThermometer;
+byte insideThermometer[8];
 double temperature;
 OneWire oneWire(oneWirePin);
 DallasTemperature tempSensor(&oneWire);
@@ -92,7 +92,7 @@ double setPoint = 70;
 int pValue = 50;
 int iValue = 600;
 int dValue = 10;
-PID controller(&temperature, &pidOutput, &setPoint, pValue, iValue, dValue);
+PID controller(&temperature, &pidOutput, &setPoint, pValue, iValue, dValue, DIRECT);
 float timeArrayRamp[2] = {0,5};
 float tempArrayRamp[2] = {60, 225};
 float slopesArrayRamp[2] = {0, 0};
@@ -123,7 +123,7 @@ void setup_controllers(void) {
     Serial.println( i/60000 );
   }
   
-  controller.SetMode(AUTO);
+  controller.SetMode(AUTOMATIC);
   Serial.println("PID Controller initialized.");
 }
 

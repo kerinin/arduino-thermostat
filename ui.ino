@@ -29,6 +29,7 @@ Button escape(MemoryTimer);
 Button confirm(MemoryTimer);
 int lastButtonPress = -4000;
 int screensaverDelay = 4000;
+boolean saveLater = false;
 
 void ui_setup(){
   lcd.begin( 16, 2);
@@ -61,6 +62,10 @@ void ui_loop(){
   if(confirm.check() == Released || confirm.check() == Hold) { on_confirm_pin(); }
   
   if(millis() - lastButtonPress > screensaverDelay) { defaultDisplay(); }
+  if(saveLater && millis() - lastButtonPress > 4000) { 
+    saveLater = false;
+    save();
+  }
 }
 
 void defaultDisplay() {
@@ -105,14 +110,14 @@ void on_set_target(MenuItem* mi){
   Serial.println(F("set target"));
   config.targetTemp += 1.0;
   if(config.targetTemp > 240.0) { config.targetTemp = 32.0; }
-  save();
+  saveLater = true;
 }
 
 void on_set_hardware(MenuItem* mi){
   Serial.println(F("Set hardware"));
   config.driving += 1;
   if(config.driving >= (sizeof profiles / sizeof profiles[0])) { config.driving = 0; }
-  save();
+  saveLater = true;
 }
 
 void on_set_noise(MenuItem* mi){

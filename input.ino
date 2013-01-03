@@ -11,7 +11,7 @@ void input_setup(){
   pinMode( oneWirePin, INPUT );
   tempSensor.begin();
   tempSensor.setResolution(12);
-  tempSensor.setWaitForConversion(false);
+  //tempSensor.setWaitForConversion(false);
   tempSensor.setCheckForConversion(true);
   tempSensor.requestTemperatures();
   lastReading = millis();
@@ -41,6 +41,9 @@ void input_loop(){
       temperature = tempSensor.toFahrenheit(tempC);
       tempSensor.requestTemperatures();
       lastReading = millis();
+      
+      Serial.print("Log\ttemp\t");
+      Serial.println(temperature);
     }
   }
 }

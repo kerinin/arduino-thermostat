@@ -55,6 +55,8 @@ void setup() {
   Serial.println("*******************");
   Serial.flush();
   
+  load();
+  
   input_setup();
   Serial.println(F("-> Input"));
   Serial.flush();
@@ -66,8 +68,6 @@ void setup() {
   ui_setup();
   Serial.println(F("-> UI"));
   Serial.flush();
-  
-  load();
 }
 
 void loop() {

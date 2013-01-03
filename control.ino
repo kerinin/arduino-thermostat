@@ -1,10 +1,15 @@
+#define controlPin 10
+
 PID myPID(&temperature, &power, &config.targetTemp, 0.0, 0.0, 0.0, DIRECT);
 PID_ATune aTune(&temperature, &power);
+double lastPower;
 
 void control_setup(){
 }
 
 void control_loop() {
+  pinMode( controlPin, OUTPUT );
+  
   if(config.tuning && aTune.Runtime()) {
     finishAutotune();
   } else if(!config.tuning) {
@@ -12,6 +17,13 @@ void control_loop() {
     myPID.SetTunings(profiles[config.driving].kp, profiles[config.driving].ki, profiles[config.driving].kd);
     myPID.SetSampleTime(profiles[config.driving].sampleTime);  // Update the control value once per second
     myPID.Compute();
+    
+    if(lastPower != power) {
+      lastPower = power;
+      analogWrite(controlPin, power);
+      Serial.print("Log\tpower\t");
+      Serial.println(power);
+    }
   }
 }
 

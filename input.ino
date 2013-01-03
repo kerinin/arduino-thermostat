@@ -28,7 +28,6 @@ void input_loop(){
   */
   if(millis() - lastReading > 750) {
     float tempC = tempSensor.getTempCByIndex(0);
-    Serial.println(tempC);
     
     if(tempC == DEVICE_DISCONNECTED) {
       // Sensor disconnected

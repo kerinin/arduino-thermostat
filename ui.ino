@@ -20,7 +20,7 @@ Menu m_tune("Auto Tune");
   MenuItem mi_noise("Noise Band (F)");
   MenuItem mi_lookback("Loockback (s)");
   MenuItem mi_tune("DOIT NAOW!!!");
-MenuItem mi_save("Save Settings");
+MenuItem mi_reset("Reset Settings");
 char lcd_buf1[16];
 char lcd_buf2[16];
 Button up(MemoryTimer);
@@ -39,7 +39,7 @@ void ui_setup(){
     m_tune.add_item(&mi_noise, &on_set_noise);
     m_tune.add_item(&mi_lookback, &on_set_loockback);
     m_tune.add_item(&mi_tune, &on_set_tune);
-  mm.add_item(&mi_save, &on_set_save);
+  mm.add_item(&mi_reset, &on_set_reset);
   
   pinMode(upPin, INPUT);
   up.assign(upPin);
@@ -68,63 +68,99 @@ void defaultDisplay() {
   char new_lcd1[16];
   char new_lcd2[16];
   dtostrf(temperature,4,1,temp_string);
-  sprintf(new_lcd1, "sp %i\337 t %s\337", (int)targetTemp, temp_string);
-  sprintf(new_lcd2, "power %i%%", power);
+  sprintf(new_lcd1, "%s\337 >>--> %i\337", temp_string, (int)config.targetTemp);
+  sprintf(new_lcd2, "power %i%%", (int)(100.0 * ((float)power / 255.0)));
   flush_lcd(new_lcd1, new_lcd2);
 }
 
 void on_up_pin(){
-  Serial.println("up");
+  Serial.println(F("up"));
   ms.prev();
   lastButtonPress = millis();
   update_lcd();
 }
 
 void on_down_pin(){
-  Serial.println("down");
+  Serial.println(F("down"));
   ms.next();
   lastButtonPress = millis();
   update_lcd();
 }
 
 void on_escape_pin(){
-  Serial.println("escape");
+  Serial.println(F("escape"));
   ms.back();
   lastButtonPress = millis();
   update_lcd();
 }
 
 void on_confirm_pin(){
-  Serial.println("confirm");
+  Serial.println(F("confirm"));
   ms.select();
   lastButtonPress = millis();
   update_lcd();
 }
 
 void on_set_target(MenuItem* mi){
-  Serial.println("set target");
-  targetTemp += 1.0;
-  if(targetTemp > 240.0) { targetTemp = 32.0; }
+  Serial.println(F("set target"));
+  config.targetTemp += 1.0;
+  if(config.targetTemp > 240.0) { config.targetTemp = 32.0; }
+  save();
 }
 
 void on_set_hardware(MenuItem* mi){
-  Serial.println("Set hardware");
+  Serial.println(F("Set hardware"));
+  config.driving += 1;
+  if(config.driving >= (sizeof profiles / sizeof profiles[0])) { config.driving = 0; }
+  save();
 }
 
 void on_set_noise(MenuItem* mi){
-  Serial.println("Set noise");
+  Serial.println(F("Set noise"));
 }
 
 void on_set_loockback(MenuItem* mi){
-  Serial.println("Set loockback");
+  Serial.println(F("Set loockback"));
 }
 
 void on_set_tune(MenuItem* mi){
-  Serial.println("Set tune");
+  Serial.println(F("Set tune"));
 }
 
-void on_set_save(MenuItem* mi){
-  Serial.println("Set save");
+void on_set_reset(MenuItem* mi){
+  Serial.println(F("Set reset"));
+  config.paused = false;
+  config.driving = 0;
+  config.targetTemp = 140;
+  config.tuning = false;
+  config.noiseBand = 20;
+  config.lookbackMin = 5;
+  
+  strcpy(profiles[0].name, "Default");
+  profiles[0].kp = 2;
+  profiles[0].ki = 0.5;
+  profiles[0].kd = 2;
+  profiles[0].sampleTime = 1000;
+  
+  strcpy(profiles[1].name, "Fermenter");
+  profiles[1].kp = 2;
+  profiles[1].ki = 0.5;
+  profiles[1].kd = 2;
+  profiles[1].sampleTime = 1000;
+  
+  strcpy(profiles[2].name, "Sous Vide");
+  profiles[2].kp = 2;
+  profiles[2].ki = 0.5;
+  profiles[2].kd = 2;
+  profiles[2].sampleTime = 1000;
+  
+  strcpy(profiles[3].name, "Smoker");
+  profiles[3].kp = 2;
+  profiles[3].ki = 0.5;
+  profiles[3].kd = 2;
+  profiles[3].sampleTime = 1000;
+  
+  save();
 }
 
 void update_lcd(){
@@ -134,20 +170,21 @@ void update_lcd(){
   
   MenuComponent const* selected = ms.get_current_menu()->get_selected();
   if(selected == &mi_target) {
-    sprintf(new_lcd2, "%i\337", (int)targetTemp);
+    sprintf(new_lcd2, "%i\337", (int)config.targetTemp);
   } else if(selected == &mi_hardware) {
-    sprintf(new_lcd2, "(later)");
+    sprintf(new_lcd2, profiles[config.driving].name);
   } else if(selected == &m_tune) {
     sprintf(new_lcd2, "->");
   } else if(selected == &mi_noise) {
-    sprintf(new_lcd2, "%i\337", (int)noiseBand);
+    sprintf(new_lcd2, "%i\337", (int)config.noiseBand);
   } else if(selected == &mi_lookback) {
-    sprintf(new_lcd2, "%i minutes", lookbackMin);
-  } else if(selected == &mi_tune) {
+    sprintf(new_lcd2, "%i minutes", config.lookbackMin);
+  } else {
+    strcpy(new_lcd2, "");
+  } /*else if(selected == &mi_tune) {
     sprintf(new_lcd2, "Start");
-  } else if(selected == &mi_save) {
-    sprintf(new_lcd2, "Save");
-  }
+  }*/
+  
   
   flush_lcd(new_lcd1, new_lcd2);
 }

@@ -17,48 +17,62 @@
 #define drivingSousVide 1
 #define drivingSmoker 2
 
-boolean paused = false;     // PID doesn't update control variable if TRUE
-int driving = 0;        // The hardware being controlled
-float targetTemp = 32.0;   // The temperature we want to hit (user-specified)
 double temperature = 0.0;
 double power = 0.0;
-boolean tuning = false;     // Are we tuning?
-float noiseBand;    // Autotune noise band
-float lookbackMin;  // Autotune lookback
+struct configuration {
+  boolean paused;     // PID doesn't update control variable if TRUE
+  unsigned short int driving;        // The hardware being controlled
+  double targetTemp;  // The temperature we want to hit (user-specified)
+  boolean tuning;     // Are we tuning?
+  float noiseBand;    // Autotune noise band
+  float lookbackMin;  // Autotune lookback
+} config;
+
 // Control
 struct profile {
+  char name[16];
   double kp, ki, kd;
   int sampleTime;
 };
-profile fermenterProfile = {2, 0.5, 2, 1000};
-profile sousVideProfile = {2, 0.4, 2, 1000};
-profile smokerProfile = {2, 0.5, 2, 1000};
-profile otherProfile = {2, 0.5, 2, 1000};
-profile* profiles[] = {&fermenterProfile, &sousVideProfile, &smokerProfile, &otherProfile};
+profile profiles[4];
 
 void(* resetFunc) (void) = 0;
 
+void load(){
+  Serial.println(F("Loading"));
+  EEPROM.readBlock(256, config);
+  EEPROM.readBlock(0, profiles, 4);
+}
+
+void save(){
+  Serial.println(F("Saving"));
+  Serial.println(EEPROM.updateBlock(256, config));
+  Serial.println(EEPROM.updateBlock(0, profiles, 4));
+}
+
 void setup() {
   Serial.begin(9600);
-  Serial.println("Starting");
+  Serial.println("*******************");
   Serial.flush();
   
   input_setup();
-  Serial.println("Input Setup");
+  Serial.println(F("-> Input"));
   Serial.flush();
   
-  //control_setup();
-  Serial.println("Control Setup");
-  //Serial.flush();
+  control_setup();
+  Serial.println(F("-> Control"));
+  Serial.flush();
   
   ui_setup();
-  Serial.println("UI Setup");
+  Serial.println(F("-> UI"));
   Serial.flush();
+  
+  load();
 }
 
 void loop() {
   input_loop();
-  //control_loop();
+  control_loop();
   ui_loop();
 }
 

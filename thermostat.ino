@@ -36,14 +36,16 @@ profile smokerProfile = {2, 0.5, 2, 1000};
 profile otherProfile = {2, 0.5, 2, 1000};
 profile* profiles[] = {&fermenterProfile, &sousVideProfile, &smokerProfile, &otherProfile};
 
+void(* resetFunc) (void) = 0;
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Starting");
   Serial.flush();
   
-  //input_setup();
+  input_setup();
   Serial.println("Input Setup");
-  //Serial.flush();
+  Serial.flush();
   
   //control_setup();
   Serial.println("Control Setup");
@@ -55,7 +57,7 @@ void setup() {
 }
 
 void loop() {
-  //input_loop();
+  input_loop();
   //control_loop();
   ui_loop();
 }

@@ -153,10 +153,6 @@ void update_lcd(){
 }
 
 void flush_lcd(char *lcd1, char *lcd2){
-  Serial.println(lcd_buf1);
-  Serial.println(lcd_buf2);
-  Serial.println(lcd1);
-  Serial.println(lcd2);
   if(strcmp(lcd1, lcd_buf1) != 0 || strcmp(lcd2, lcd_buf2) != 0) {
     lcd.clear();
     

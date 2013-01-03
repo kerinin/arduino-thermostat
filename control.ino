@@ -1,45 +1,46 @@
-#define controlPin 10
+#define control_pin 10
 
-PID myPID(&temperature, &power, &config.targetTemp, 0.0, 0.0, 0.0, DIRECT);
-PID_ATune aTune(&temperature, &power);
-double lastPower;
+
+PID pid(&temperature, &power, &config.target_temp, 0.0, 0.0, 0.0, DIRECT);
+PID_ATune auto_tune(&temperature, &power);
+double last_power;
 
 void control_setup(){
 }
 
 void control_loop() {
-  pinMode( controlPin, OUTPUT );
+  pinMode( control_pin, OUTPUT );
   
-  if(config.tuning && aTune.Runtime()) {
-    finishAutotune();
+  if(config.tuning && auto_tune.Runtime()) {
+    finish_autotune();
   } else if(!config.tuning) {
-    myPID.SetMode(!config.paused);
-    myPID.SetTunings(profiles[config.driving].kp, profiles[config.driving].ki, profiles[config.driving].kd);
-    myPID.SetSampleTime(profiles[config.driving].sampleTime);  // Update the control value once per second
-    myPID.Compute();
+    pid.SetMode(!config.paused);
+    pid.SetTunings(profiles[config.driving].kp, profiles[config.driving].ki, profiles[config.driving].kd);
+    pid.SetSampleTime(profiles[config.driving].sample_time);  // Update the control value once per second
+    pid.Compute();
     
-    if(lastPower != power) {
-      lastPower = power;
-      analogWrite(controlPin, power);
+    if(last_power != power) {
+      last_power = power;
+      analogWrite(control_pin, power);
       Serial.print("Log\tpower\t");
       Serial.println(power);
     }
   }
 }
 
-void finishAutotune() {
-  profiles[config.driving].kp = aTune.GetKp();
-  profiles[config.driving].ki = aTune.GetKi();
-  profiles[config.driving].kd = aTune.GetKd();
+void finish_autotune() {
+  profiles[config.driving].kp = auto_tune.GetKp();
+  profiles[config.driving].ki = auto_tune.GetKi();
+  profiles[config.driving].kd = auto_tune.GetKd();
   
   save();
   config.tuning = false;
 }
 
-void startAutotune() {
-  aTune.SetNoiseBand(config.noiseBand);
-  aTune.SetOutputStep(50);
-  aTune.SetLookbackSec((int)(config.lookbackMin * 60));
+void start_autotune() {
+  auto_tune.SetNoiseBand(config.noise_band);
+  auto_tune.SetOutputStep(50);
+  auto_tune.SetLookbackSec((int)(config.lookback_min * 60));
   
   config.tuning = true;
 }

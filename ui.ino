@@ -1,17 +1,17 @@
-#define lcdRsPin 12
-#define lcdEnablePin 13
-#define lcdD4Pin 4
-#define lcdD5Pin 5
-#define lcdD6Pin 6
-#define lcdD7Pin 7
+#define lcd_rs_pin 12
+#define lcd_enable_pin 13
+#define lcd_d4_pin 4
+#define lcd_d5_pin 5
+#define lcd_d6_pin 6
+#define lcd_d7_pin 7
 
-#define escapePin A4
-#define confirmPin A2
-#define upPin A0
-#define downPin A3
+#define escape_pin A4
+#define confirm_pin A2
+#define up_pin A0
+#define down_pin A3
 
 // UI
-LiquidCrystal lcd(lcdRsPin, lcdEnablePin, lcdD4Pin, lcdD5Pin, lcdD6Pin, lcdD7Pin);
+LiquidCrystal lcd(lcd_rs_pin, lcd_enable_pin, lcd_d4_pin, lcd_d5_pin, lcd_d6_pin, lcd_d7_pin);
 MenuSystem ms;
 Menu mm("Main Menu");
 MenuItem mi_target("Target Temp.");
@@ -27,9 +27,9 @@ Button up(MemoryTimer);
 Button down(MemoryTimer);
 Button escape(MemoryTimer);
 Button confirm(MemoryTimer);
-int lastButtonPress = -4000;
-int screensaverDelay = 4000;
-boolean saveLater = false;
+int last_button_press = -4000;
+int screensaver_delay = 4000;
+boolean save_later = false;
 
 void ui_setup(){
   lcd.begin( 16, 2);
@@ -42,14 +42,14 @@ void ui_setup(){
     m_tune.add_item(&mi_tune, &on_set_tune);
   mm.add_item(&mi_reset, &on_set_reset);
   
-  pinMode(upPin, INPUT);
-  up.assign(upPin);
-  pinMode(downPin, INPUT);
-  down.assign(downPin);
-  pinMode(escapePin, INPUT);
-  escape.assign(escapePin);
-  pinMode(confirmPin, INPUT);
-  confirm.assign(confirmPin);
+  pinMode(up_pin, INPUT);
+  up.assign(up_pin);
+  pinMode(down_pin, INPUT);
+  down.assign(down_pin);
+  pinMode(escape_pin, INPUT);
+  escape.assign(escape_pin);
+  pinMode(confirm_pin, INPUT);
+  confirm.assign(confirm_pin);
   confirm.setRefresh(20);
   
   update_lcd();
@@ -61,19 +61,19 @@ void ui_loop(){
   if(escape.check() == Released || escape.check() == Hold) { on_escape_pin(); }
   if(confirm.check() == Released || confirm.check() == Hold) { on_confirm_pin(); }
   
-  if(millis() - lastButtonPress > screensaverDelay) { defaultDisplay(); }
-  if(saveLater && millis() - lastButtonPress > 4000) { 
-    saveLater = false;
+  if(millis() - last_button_press > screensaver_delay) { default_display(); }
+  if(save_later && millis() - last_button_press > 4000) { 
+    save_later = false;
     save();
   }
 }
 
-void defaultDisplay() {
+void default_display() {
   char temp_string[5];
   char new_lcd1[16];
   char new_lcd2[16];
   dtostrf(temperature,4,1,temp_string);
-  sprintf(new_lcd1, "%s\337 >>--> %i\337", temp_string, (int)config.targetTemp);
+  sprintf(new_lcd1, "%s\337 >>--> %i\337", temp_string, (int)config.target_temp);
   sprintf(new_lcd2, "power %i%%", (int)(100.0 * ((float)power / 255.0)));
   flush_lcd(new_lcd1, new_lcd2);
 }
@@ -81,43 +81,43 @@ void defaultDisplay() {
 void on_up_pin(){
   Serial.println(F("up"));
   ms.prev();
-  lastButtonPress = millis();
+  last_button_press = millis();
   update_lcd();
 }
 
 void on_down_pin(){
   Serial.println(F("down"));
   ms.next();
-  lastButtonPress = millis();
+  last_button_press = millis();
   update_lcd();
 }
 
 void on_escape_pin(){
   Serial.println(F("escape"));
   ms.back();
-  lastButtonPress = millis();
+  last_button_press = millis();
   update_lcd();
 }
 
 void on_confirm_pin(){
   Serial.println(F("confirm"));
   ms.select();
-  lastButtonPress = millis();
+  last_button_press = millis();
   update_lcd();
 }
 
 void on_set_target(MenuItem* mi){
   Serial.println(F("set target"));
-  config.targetTemp += 1.0;
-  if(config.targetTemp > 240.0) { config.targetTemp = 32.0; }
-  saveLater = true;
+  config.target_temp += 1.0;
+  if(config.target_temp > 240.0) { config.target_temp = 32.0; }
+  save_later = true;
 }
 
 void on_set_hardware(MenuItem* mi){
   Serial.println(F("Set hardware"));
   config.driving += 1;
   if(config.driving >= (sizeof profiles / sizeof profiles[0])) { config.driving = 0; }
-  saveLater = true;
+  save_later = true;
 }
 
 void on_set_noise(MenuItem* mi){
@@ -136,34 +136,34 @@ void on_set_reset(MenuItem* mi){
   Serial.println(F("Set reset"));
   config.paused = false;
   config.driving = 0;
-  config.targetTemp = 140;
+  config.target_temp = 140;
   config.tuning = false;
-  config.noiseBand = 20;
-  config.lookbackMin = 5;
+  config.noise_band = 20;
+  config.lookback_min = 5;
   
   strcpy(profiles[0].name, "Default");
   profiles[0].kp = 2;
   profiles[0].ki = 0.5;
   profiles[0].kd = 2;
-  profiles[0].sampleTime = 1000;
+  profiles[0].sample_time = 1000;
   
   strcpy(profiles[1].name, "Fermenter");
   profiles[1].kp = 2;
   profiles[1].ki = 0.5;
   profiles[1].kd = 2;
-  profiles[1].sampleTime = 1000;
+  profiles[1].sample_time = 1000;
   
   strcpy(profiles[2].name, "Sous Vide");
   profiles[2].kp = 2;
   profiles[2].ki = 0.5;
   profiles[2].kd = 2;
-  profiles[2].sampleTime = 1000;
+  profiles[2].sample_time = 1000;
   
   strcpy(profiles[3].name, "Smoker");
   profiles[3].kp = 2;
   profiles[3].ki = 0.5;
   profiles[3].kd = 2;
-  profiles[3].sampleTime = 1000;
+  profiles[3].sample_time = 1000;
   
   save();
 }
@@ -175,15 +175,15 @@ void update_lcd(){
   
   MenuComponent const* selected = ms.get_current_menu()->get_selected();
   if(selected == &mi_target) {
-    sprintf(new_lcd2, "%i\337", (int)config.targetTemp);
+    sprintf(new_lcd2, "%i\337", (int)config.target_temp);
   } else if(selected == &mi_hardware) {
     sprintf(new_lcd2, profiles[config.driving].name);
   } else if(selected == &m_tune) {
     sprintf(new_lcd2, "->");
   } else if(selected == &mi_noise) {
-    sprintf(new_lcd2, "%i\337", (int)config.noiseBand);
+    sprintf(new_lcd2, "%i\337", (int)config.noise_band);
   } else if(selected == &mi_lookback) {
-    sprintf(new_lcd2, "%i minutes", config.lookbackMin);
+    sprintf(new_lcd2, "%i minutes", config.lookback_min);
   } else {
     strcpy(new_lcd2, "");
   } /*else if(selected == &mi_tune) {

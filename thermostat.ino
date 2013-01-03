@@ -13,30 +13,26 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#define drivingFermenter 0
-#define drivingSousVide 1
-#define drivingSmoker 2
-
 double temperature = 0.0;
 double power = 0.0;
 struct configuration {
   boolean paused;     // PID doesn't update control variable if TRUE
   unsigned short int driving;        // The hardware being controlled
-  double targetTemp;  // The temperature we want to hit (user-specified)
+  double target_temp;  // The temperature we want to hit (user-specified)
   boolean tuning;     // Are we tuning?
-  float noiseBand;    // Autotune noise band
-  float lookbackMin;  // Autotune lookback
+  float noise_band;    // Autotune noise band
+  float lookback_min;  // Autotune lookback
 } config;
 
 // Control
 struct profile {
   char name[16];
   double kp, ki, kd;
-  int sampleTime;
+  int sample_time;
 };
 profile profiles[4];
 
-void(* resetFunc) (void) = 0;
+void(* reset_func) (void) = 0;
 
 void load(){
   Serial.println(F("Loading"));

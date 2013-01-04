@@ -23,7 +23,7 @@ void control_loop() {
       last_power = power;
       analogWrite(control_pin, power);
       Serial.print("Log\tpower\t");
-      Serial.println(power);
+      Serial.println((100.0 * ((float)power / 255.0)));
     }
   }
 }

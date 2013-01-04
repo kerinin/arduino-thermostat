@@ -27,7 +27,7 @@ Button up(MemoryTimer);
 Button down(MemoryTimer);
 Button escape(MemoryTimer);
 Button confirm(MemoryTimer);
-int last_button_press = -4000;
+double last_button_press = -4000;
 int screensaver_delay = 4000;
 boolean save_later = false;
 

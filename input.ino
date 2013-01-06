@@ -1,6 +1,14 @@
-#define one_wire_pin 11
+#define one_wire_pin 7
 
 unsigned long last_reading;
+/*
+NOTE: this value is based on the bit resolution of the sensor:
+9bit:  94ms
+10bit: 188ms
+11bit: 375ms
+12bit: 750ms
+*/
+int sensor_read_delay = 375;
 
 // Input
 OneWire one_wire(one_wire_pin);
@@ -9,7 +17,7 @@ DeviceAddress sensor_address;
 
 void initialize_sensors() {
   temp_sensor.begin();
-  temp_sensor.setResolution(12);
+  temp_sensor.setResolution(11);
   temp_sensor.setWaitForConversion(false);
   temp_sensor.setCheckForConversion(true);
 }
@@ -25,14 +33,8 @@ void input_setup(){
 
 
 void input_loop(){
-  /*
-  NOTE: this value is based on the bit resolution of the sensor:
-  9bit:  94ms
-  10bit: 188ms
-  11bit: 375ms
-  12bit: 750ms
-  */
-  if(millis() - last_reading > 750) {
+
+  if(millis() - last_reading > sensor_read_delay) {
     float temp_c = temp_sensor.getTempC(sensor_address);
     
     if(temp_c == DEVICE_DISCONNECTED) {
@@ -42,15 +44,17 @@ void input_loop(){
     } else if(temp_c == 85.0) {
       Serial.println(F("Device read prematurely, re-initializing IC"));
       
+      sensor_read_delay += 5;
       initialize_sensors();
       last_reading = millis();
     } else {
-      temperature = temp_sensor.toFahrenheit(temp_c);
+      if(temp_sensor.toFahrenheit(temp_c) != temperature) {
+        temperature = temp_sensor.toFahrenheit(temp_c);
+        Serial.print("Log\ttemp\t");
+        Serial.println(temperature);
+      }   
       temp_sensor.requestTemperatures();
       last_reading = millis();
-      
-      Serial.print("Log\ttemp\t");
-      Serial.println(temperature);
     }
   }
 }

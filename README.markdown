@@ -4,6 +4,7 @@ This is a PID thermostat for the arduino.  It supports independent
 tuning parameters for multiple hardware 'profiles', and includes
 an autotune mode to estimate the PID parameters for a given setpoint.
 
+
 ## Installation
 
 ### Hardware
@@ -19,7 +20,7 @@ OSX:
 
 ``` sh
 sudo pip install ino
-brew install piccom
+brew install picocom
 ```
 
 Other OS's will have their own picocom install process.  Picocom is only
@@ -38,6 +39,7 @@ git submodule init && git submodule update
 ino build
 ino upload
 ```
+
 
 ## Using
 
@@ -60,6 +62,11 @@ The PID and autotune features use the awesome PID and PID_Autotune libraries
 by Bret Beauregard.  For more information on how they work take a look at
 [this post about the PID library](http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/)
 and [this post about the Autotune library](http://brettbeauregard.com/blog/2012/01/arduino-pid-autotune-library/)
+
+
+## Contributing
+
+Please do!  Fork the repo, make some changes and send me a pull request!
 
 
 ## Future Directions

@@ -1,0 +1,42 @@
+#######################################
+# Syntax Coloring Map For Test
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Button	KEYWORD1
+buttons	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+assign	KEYWORD2
+setMode	KEYWORD2
+setTimer	KEYWORD2
+setRefresh	KEYWORD2
+check	KEYWORD2
+turnOnPullUp	KEYWORD2
+turnOffPullUp	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+OneShot	LITERAL1
+Memory	LITERAL1
+Timer	LITERAL1
+OneShotTimer	LITERAL1
+MemoryTimer	LITERAL1
+ON	LITERAL1
+OFF	LITERAL1
+Pressed	LITERAL1
+Released	LITERAL1
+Hold	LITERAL1
+

@@ -1,0 +1,3 @@
+[submodule "lib/DallasTemperature"]
+	path = lib/DallasTemperature
+	url = git@github.com:milesburton/Arduino-Temperature-Control-Library.git

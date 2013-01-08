@@ -1,10 +1,12 @@
+#include "control.h"
+
 #define control_pin 6
 
+double last_power;
 PID pid(&temperature, &power, &config.target_temp, 0.0, 0.0, 0.0, DIRECT);
 PID_ATune auto_tune(&temperature, &power);
-double last_power;
 
-void control_setup(){
+void control_setup() {
 }
 
 void control_loop() {
@@ -15,7 +17,7 @@ void control_loop() {
   } else if(!tuning) {
     pid.SetMode(!config.paused);
     pid.SetTunings(profiles[config.driving].kp, profiles[config.driving].ki, profiles[config.driving].kd);
-    pid.SetSampleTime(profiles[config.driving].sample_time);  // Update the control value once per second
+    pid.SetSampleTime(1000 * profiles[config.driving].sample_time);  // Update the control value once per second
     pid.Compute();
   }
   

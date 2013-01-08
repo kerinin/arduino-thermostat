@@ -1,6 +1,5 @@
-#define one_wire_pin 7
+#include "input.h"
 
-unsigned long last_reading;
 /*
 NOTE: this value is based on the bit resolution of the sensor:
 9bit:  94ms
@@ -9,11 +8,10 @@ NOTE: this value is based on the bit resolution of the sensor:
 12bit: 750ms
 */
 int sensor_read_delay = 375;
-
-// Input
+unsigned long last_reading;
+DeviceAddress sensor_address;
 OneWire one_wire(one_wire_pin);
 DallasTemperature temp_sensor(&one_wire);
-DeviceAddress sensor_address;
 
 void initialize_sensors() {
   temp_sensor.begin();
@@ -23,7 +21,6 @@ void initialize_sensors() {
 }
 
 void input_setup(){
-  // Initialize sensors
   pinMode( one_wire_pin, INPUT );
   initialize_sensors();
   temp_sensor.getAddress(sensor_address, 0);
@@ -33,12 +30,11 @@ void input_setup(){
 
 
 void input_loop(){
-
   if(millis() - last_reading > sensor_read_delay) {
     float temp_c = temp_sensor.getTempC(sensor_address);
     
     if(temp_c == DEVICE_DISCONNECTED) {
-      Serial.println(F("Device disconnected"));
+      // Serial.println(F("Device disconnected"));
       
       temperature = -88.8;
     } else if(temp_c == 85.0) {

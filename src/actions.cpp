@@ -9,17 +9,17 @@ void increment_within_bounds(T *ref, int increment, int min_val, int max_val) {
 
 void increment_target(MenuMoveEvent menu) {
   Serial.print(F("increment target "));
-  increment_within_bounds( &config.target_temp, 1, 32, 260 );
+  increment_within_bounds( &profiles[config.driving].target_temp, 1, 32, 260 );
   save_later = true;
   menu_display(menu.item);
-  Serial.println(config.target_temp);
+  Serial.println(profiles[config.driving].target_temp);
 }
 void decrement_target(MenuMoveEvent menu) {
   Serial.print(F("decrement target "));
-  increment_within_bounds( &config.target_temp, -1, 32, 260 );
+  increment_within_bounds( &profiles[config.driving].target_temp, -1, 32, 260 );
   save_later = true;
   menu_display(menu.item);
-  Serial.println(config.target_temp);
+  Serial.println(profiles[config.driving].target_temp);
 }
 
 
@@ -102,7 +102,6 @@ void on_set_reset(MenuMoveEvent menu){
 void reset_settings(void) {
   config.paused = false;
   config.driving = 0;
-  config.target_temp = 140;
   config.noise_band = 2;
   config.lookback_min = 1;
   
@@ -111,24 +110,28 @@ void reset_settings(void) {
   profiles[0].ki = 0.01;
   profiles[0].kd = 0.0;
   profiles[0].sample_time = 1;
+  profiles[0].target_temp = 100;
   
   strcpy(profiles[1].name, "Fermenter");
   profiles[1].kp = 4;
   profiles[1].ki = 0.01;
   profiles[1].kd = 0.0;
   profiles[1].sample_time = 1;
+  profiles[1].target_temp = 74;
   
   strcpy(profiles[2].name, "Sous Vide");
   profiles[2].kp = 4;
   profiles[2].ki = 0.01;
   profiles[2].kd = 0.0;
   profiles[2].sample_time = 1;
+  profiles[2].target_temp = 130;
   
   strcpy(profiles[3].name, "Smoker");
   profiles[3].kp = 4;
   profiles[3].ki = 0.01;
   profiles[3].kd = 0;
   profiles[3].sample_time = 1;
+  profiles[3].target_temp = 220;
 }
 
 

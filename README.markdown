@@ -71,7 +71,6 @@ Please do!  Fork the repo, make some changes and send me a pull request!
 
 ## Future Directions
 
-* Profile-specific target temp
 * I'd like the temperatures to ramp from their current value to the target value over some time period based on 
   the tuning parameters.  This should reduce oscillation and overshoot.
 * Refactor the different files into self-contained classes.  (Stop sharing global state!!!)

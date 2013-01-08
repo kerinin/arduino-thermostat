@@ -22,9 +22,9 @@ void default_display() {
   char new_lcd2[17];
   dtostrf(temperature,4,1,temp_string);
   if(tuning) {
-    sprintf(new_lcd1, "%s\337 tune:%3i\337", temp_string, (int)config.target_temp);
+    sprintf(new_lcd1, "%s\337 tune:%3i\337", temp_string, (int)(profiles[config.driving].target_temp));
   } else {
-    sprintf(new_lcd1, "%s\337 >>>> %i\337", temp_string, (int)config.target_temp);
+    sprintf(new_lcd1, "%s\337 >>>> %i\337", temp_string, (int)(profiles[config.driving].target_temp));
   }    
   sprintf(new_lcd2, "power: %i", (int)power);
   
@@ -47,13 +47,13 @@ void menu_display(MenuItem current) {
   strcpy(new_lcd1, current.getName());
   
   if(mi_target.isEqual(current)) {
-    sprintf(new_lcd2, "%i\337F", (int)config.target_temp);
+    sprintf(new_lcd2, "%i\337F", (int)(profiles[config.driving].target_temp));
   } else if(mi_hardware.isEqual(current)) {
     sprintf(new_lcd2, profiles[config.driving].name);
   } else if(mi_sample_time.isEqual(current)) {
     sprintf(new_lcd2, "%i s", profiles[config.driving].sample_time);
   } else if(mi_noise.isEqual(current)) {
-    sprintf(new_lcd2, "%i +/- %i\337F", (int)config.target_temp, (int)config.noise_band);
+    sprintf(new_lcd2, "%i +/- %i\337F", (int)(profiles[config.driving].target_temp), (int)config.noise_band);
   } else if(mi_lookback.isEqual(current)) {
     sprintf(new_lcd2, "%i minutes", (int)config.lookback_min);
   } else if(mi_tune.isEqual(current)) {

@@ -3,7 +3,9 @@
 #define control_pin 6
 
 double last_power;
-PID pid(&temperature, &power, &config.target_temp, 0.0, 0.0, 0.0, DIRECT);
+double current_target_temp;
+// RM NOTE: This presents a challenge for profile-specific temps...
+PID pid(&temperature, &power, &current_target_temp, 0.0, 0.0, 0.0, DIRECT);
 PID_ATune auto_tune(&temperature, &power);
 
 void control_setup() {
@@ -18,6 +20,7 @@ void control_loop() {
     pid.SetMode(!config.paused);
     pid.SetTunings(profiles[config.driving].kp, profiles[config.driving].ki, profiles[config.driving].kd);
     pid.SetSampleTime(1000 * profiles[config.driving].sample_time);  // Update the control value once per second
+    current_target_temp = profiles[config.driving].target_temp;
     pid.Compute();
   }
   

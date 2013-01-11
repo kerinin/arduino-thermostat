@@ -14,6 +14,9 @@ an autotune mode to estimate the PID parameters for a given setpoint.
 * 16x2 LCD display (I'm using the LCD-09052 from Sparkfun)
 * 4 buttons (I think mine are normally closed)
 
+![Breadboard Diagram](fritzing/sketch_bb.svg)
+
+![Breadboard Diagram](fritzing/sketch_schem.png)
 ### Software
 
 OSX:

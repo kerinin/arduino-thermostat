@@ -43,10 +43,10 @@ void menu_setup(){
   up.assign(up_pin);
   pinMode(down_pin, INPUT);
   down.assign(down_pin);
-  pinMode(escape_pin, INPUT);
-  escape.assign(escape_pin);
-  pinMode(confirm_pin, INPUT);
-  confirm.assign(confirm_pin);
+  pinMode(left_pin, INPUT);
+  escape.assign(left_pin);
+  pinMode(right_pin, INPUT);
+  confirm.assign(right_pin);
   confirm.setRefresh(20);
   
   menu.select(mi_target);

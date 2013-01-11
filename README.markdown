@@ -14,9 +14,10 @@ an autotune mode to estimate the PID parameters for a given setpoint.
 * 16x2 LCD display (I'm using the LCD-09052 from Sparkfun)
 * 4 buttons (I think mine are normally closed)
 
-![Breadboard Diagram](fritzing/sketch_bb.jpg)
+![Breadboard Diagram](https://raw.github.com/kerinin/arduino-thermostat/master/fritzing/sketch_bb.jpg)
 
-![Breadboard Diagram](fritzing/sketch_schem.png)
+![Schematic Diagram](https://raw.github.com/kerinin/arduino-thermostat/master/fritzing/sketch_schem.jpg)
+
 ### Software
 
 OSX:

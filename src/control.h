@@ -9,6 +9,8 @@
 #include "structs.h"
 #include "menu.h"
 
+#define control_pin 9
+
 extern PID pid;
 extern PID_ATune auto_tune;
 extern double temperature;

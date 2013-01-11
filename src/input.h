@@ -7,7 +7,7 @@
 
 #include "structs.h"
 
-#define one_wire_pin 7
+#define one_wire_pin 8
 
 extern double temperature;
 extern double power;

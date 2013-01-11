@@ -9,9 +9,9 @@
 #include "actions.h"
 #include "lcd.h"
 
-#define escape_pin 11
-#define confirm_pin 8
-#define up_pin 9
+#define left_pin 3
+#define right_pin 2
+#define up_pin 11
 #define down_pin 10
 
 extern MenuBackend menu;

@@ -1,7 +1,5 @@
 #include "control.h"
 
-#define control_pin 6
-
 double last_power;
 double current_target_temp;
 // RM NOTE: This presents a challenge for profile-specific temps...

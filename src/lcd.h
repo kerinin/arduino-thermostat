@@ -9,10 +9,10 @@
 
 #define lcd_rs_pin 13
 #define lcd_enable_pin 12
-#define lcd_d4_pin 5
-#define lcd_d5_pin 4
-#define lcd_d6_pin 3
-#define lcd_d7_pin 2
+#define lcd_d4_pin 7
+#define lcd_d5_pin 6
+#define lcd_d6_pin 5
+#define lcd_d7_pin 4
 
 extern double temperature;
 extern double power;

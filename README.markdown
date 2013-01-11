@@ -18,6 +18,10 @@ an autotune mode to estimate the PID parameters for a given setpoint.
 
 ![Schematic Diagram](https://raw.github.com/kerinin/arduino-thermostat/master/fritzing/sketch_schem.jpg)
 
+There's an arduino shield designed specifically for this sketch which can be
+ordered for around $25 on [BatchPCB](https://www.batchpcb.com/pcbs/104052).  The
+fritzing source files for the PCB layout are in the `fritzing` directory.
+
 ### Software
 
 OSX:

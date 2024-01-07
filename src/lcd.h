@@ -1,7 +1,7 @@
 #ifndef LCD_H
 #define LCD_H
 
-#include <Arduino.h>
+//#include <Arduino.h>
 #include "LiquidCrystal.h"
 
 #include "structs.h"
